@@ -119,7 +119,7 @@ function flashCommand() {
         score += 1;
         scoreValueSpan.textContent = score;
         scoreDisplayDiv.style.display = 'block';
-    }, Math.min(500, fastestInterval / 2));
+    }, Math.min(500, interval / 2));
 }
 
 function cycleCommands() {
