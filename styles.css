@@ -1,3 +1,4 @@
+/* styles.css */
 body, html {
     height: 100%;
     margin: 0;
@@ -20,6 +21,11 @@ body.dark-mode {
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+#scoreDisplay {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 #commands {
