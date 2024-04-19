@@ -90,8 +90,19 @@ scoreDisplayDiv.style.display = lastScore ? 'block' : 'none';
 highScoreValueSpan.textContent = highScore || 0;
 
 // Game start and stop functions
+let lastSongs = [];
+
 function startGame() {
-    const songNumber = Math.floor(Math.random() * 3) + 1;
+    let songOptions = [1, 2, 3].filter(song => !lastSongs.includes(song));
+    if (songOptions.length === 0) {
+        // All songs have been played, stop the game
+        stopGame();
+        return;
+    }
+
+    const songNumber = songOptions[Math.floor(Math.random() * songOptions.length)];
+    lastSongs.push(songNumber);
+
     audio.src = `music/gb_${songNumber}.mp3`;
     audio.play();
     startButton.style.display = 'none';
@@ -133,4 +144,4 @@ function cycleCommands() {
 }
 
 // Event Listeners
-audio.addEventListener('ended', stopGame);
+audio.addEventListener('ended', startGame);
