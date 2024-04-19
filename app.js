@@ -7,19 +7,42 @@ const scoreDisplayDiv = document.getElementById('scoreDisplay');
 const scoreValueSpan = document.getElementById('scoreValue');
 const scoreTextSpan = document.getElementById('scoreText')
 
+function setParam(param, value, redirect=false) {
+    let url = new URL(window.location.href);
+    let params = new URLSearchParams(url.search);
+    params.set(param, value);
+    url.search = params.toString();
+}
+
+function getParam(param) {
+    let url = new URL(window.location.href);
+    let params = new URLSearchParams(url.search);
+    return params.get(param);
+}
+
+function getLastScore() {
+    const lastScore = getParam('last-score');
+    if (lastScore) {
+        return parseInt(lastScore);
+    } else {
+        return null;
+    }
+}
+
+// Initial State
 let score = 0;
 let interval = 5000;
+const lastScore = getLastScore();
+
 
 // Display the last score if it exists, else hide the score
-let url = new URL(window.location.href);
-let params = new URLSearchParams(url.search);
-let lastScore = params.get('last-score');
-
 if (lastScore) {
     scoreValueSpan.textContent = lastScore;
 } else {
     scoreDisplayDiv.style.display = 'none';
 }
+
+// Game functions
 
 function startMusic() {
     const songNumber = Math.floor(Math.random() * 3) + 1;
