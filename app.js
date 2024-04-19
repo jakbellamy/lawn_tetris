@@ -16,6 +16,8 @@ let lastScore = params.get('last-score');
 
 if (lastScore) {
     scoreValueSpan.textContent = lastScore;
+} else {
+    scoreDisplayDiv.style.display = 'none';
 }
 
 
