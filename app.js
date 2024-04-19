@@ -6,7 +6,9 @@ const stopButton = document.getElementById('stopButton');
 const scoreDisplayDiv = document.getElementById('scoreDisplay');
 const scoreValueSpan = document.getElementById('scoreValue');
 const scoreTextSpan = document.getElementById('scoreText')
+const highScoreValueSpan = document.getElementById('highScoreValue');
 
+console.log('Custom Parameters: ', '\n1. interval\n2. fastest-interval' )
 // URL Parameter Functions
 function setParamsAndRedirect(paramProps, valueProps) {
     let url = new URL(window.location.href);
@@ -55,18 +57,37 @@ function saveEndingScore(score) {
     setParamsAndRedirect(params, values);
 }
 
+function getCustomInterval() {
+    const customInterval = getParam('interval');
+    if (customInterval) {
+        return parseInt(customInterval);
+    } else {
+        return null;
+    }
+}
+
+function getCustomFastetInterval() {
+    const customInterval = getParam('fastest-interval');
+    if (customInterval) {
+        return parseInt(customInterval);
+    } else {
+        return null;
+    }
+}
+
 // Initial Game State
 let score = 0;
-let interval = 5000;
 const lastScore = getLastScore();
 const highScore = getHighScore();
+let interval = getCustomInterval() || 5000;
+const fastestInterval = getCustomFastetInterval() || 1000;
 
 // Display the last score if it exists, else hide the score
 scoreValueSpan.textContent = lastScore || '';
 scoreDisplayDiv.style.display = lastScore ? 'block' : 'none';
 
 // Display the high score if it exists, else hide the high score
-document.getElementById('highScoreValue').textContent = highScore || 0;
+highScoreValueSpan.textContent = highScore || 0;
 
 // Game start and stop functions
 function startGame() {
@@ -98,7 +119,7 @@ function flashCommand() {
         score += 1;
         scoreValueSpan.textContent = score;
         scoreDisplayDiv.style.display = 'block';
-    }, 500);
+    }, Math.min(500, fastestInterval / 2));
 }
 
 function cycleCommands() {
@@ -108,7 +129,7 @@ function cycleCommands() {
             cycleCommands();
         }
     }, interval); // Initial interval is 5 seconds
-    interval = Math.max(interval - 100, 1000); // Decrease interval by 100ms, but keep it at a minimum of 1 second
+    interval = Math.max(interval - 100, fastestInterval); // Decrease interval by 100ms, but keep it at a minimum of 1 second
 }
 
 // Event Listeners
