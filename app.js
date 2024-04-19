@@ -21,13 +21,13 @@ function stopMusic() {
     commandsDiv.style.display = 'none';
     stopButton.style.display = 'none';
     startButton.style.display = 'block';
-    document.body.className = 'dark-mode'; // Reset to dark mode
+    document.body.className = 'dark-mode';
 }
 
 function flashCommand(initial = false) {
     commandsDiv.textContent = 'Insert Piece';
     commandsDiv.style.display = 'block';
-    document.body.className = 'light-mode'; // Change to light mode when flashing
+    document.body.className = 'light-mode'; // Light mode when command is displayed
     setTimeout(() => {
         commandsDiv.style.display = 'none';
         document.body.className = 'dark-mode'; // Immediately revert to dark mode after flash
