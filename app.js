@@ -1,11 +1,23 @@
-// app.js
+
 const audio = document.getElementById('tetrisAudio');
 const commandsDiv = document.getElementById('commands');
 const startButton = document.getElementById('startButton');
 const stopButton = document.getElementById('stopButton');
+const scoreDisplayDiv = document.getElementById('scoreDisplay');
 const scoreValueSpan = document.getElementById('scoreValue');
+const scoreTextSpan = document.getElementById('scoreText')
 
 let score = 0;
+
+// Display the last score if it exists, else hide the score
+let url = new URL(window.location.href);
+let params = new URLSearchParams(url.search);
+let lastScore = params.get('last-score');
+
+if (lastScore) {
+    scoreValueSpan.textContent = lastScore;
+}
+
 
 function startMusic() {
     const songNumber = Math.floor(Math.random() * 3) + 1;
@@ -14,28 +26,31 @@ function startMusic() {
     startButton.style.display = 'none';
     stopButton.style.display = 'block';
     document.body.className = 'dark-mode';
+    scoreTextSpan.textContent = 'Score: ';
+    scoreValueSpan.textContent = '0';
     flashCommand(true);
     cycleCommands();
 }
 
 function stopMusic() {
-    window.location.search = `last-score=${score}`;
-    window.location.reload();
-    
-    score = 0;
+    let url = new URL(window.location.href);
+    let params = new URLSearchParams(url.search);
+    params.set('last-score', score);
+    url.search = params.toString();
+    window.location.href = url.toString();
 }
 
-function flashCommand(initial = false) {
+function flashCommand() {
+    scoreDisplayDiv.style.display = 'none';
     commandsDiv.textContent = 'Insert Piece';
     commandsDiv.style.display = 'block';
     document.body.className = 'light-mode';
     setTimeout(() => {
         commandsDiv.style.display = 'none';
         document.body.className = 'dark-mode';
-        if (!initial) {
-            score++;
-            scoreValueSpan.textContent = score;
-        }
+        score++;
+        scoreValueSpan.textContent = score;
+        scoreDisplayDiv.style.display = 'block';
     }, 500);
 }
 
@@ -51,3 +66,4 @@ function cycleCommands() {
 document.getElementById('tetrisAudio').addEventListener('ended', () => {
     stopMusic();
 });
+
