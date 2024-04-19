@@ -8,12 +8,13 @@
 </head>
 <body class="dark-mode">
     <div id="gameContainer">
+        <div id="highScoreDisplay">High Score: <span id="highScoreValue">0</span></div>
         <div id="scoreDisplay">
             <span id="scoreText">Last Score: </span><span id="scoreValue"></span>
         </div>
-        <button id="startButton" onclick="startMusic()">Play</button>
+        <button id="startButton" onclick="startGame()">Play</button>
         <div id="commands" style="display: none;">Insert Piece</div>
-        <button id="stopButton" style="display: none;" onclick="stopMusic()">X</button>
+        <button id="stopButton" style="display: none;" onclick="stopGame()">X</button>
     </div>
     <audio id="tetrisAudio"></audio>
 </body>

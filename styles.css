@@ -46,3 +46,10 @@ button {
     right: 20px;
     font-size: 30px;
 }
+
+#highScoreDisplay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 15px;
+}

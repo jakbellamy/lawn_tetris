@@ -1,4 +1,4 @@
-
+// DOM Elements
 const audio = document.getElementById('tetrisAudio');
 const commandsDiv = document.getElementById('commands');
 const startButton = document.getElementById('startButton');
@@ -7,11 +7,16 @@ const scoreDisplayDiv = document.getElementById('scoreDisplay');
 const scoreValueSpan = document.getElementById('scoreValue');
 const scoreTextSpan = document.getElementById('scoreText')
 
-function setParam(param, value, redirect=false) {
+// URL Parameter Functions
+function setParamsAndRedirect(paramProps, valueProps) {
     let url = new URL(window.location.href);
     let params = new URLSearchParams(url.search);
-    params.set(param, value);
+    for (let i = 0; i < paramProps.length; i++) {
+        params.set(paramProps[i], valueProps[i]);
+    }
     url.search = params.toString();
+    window.location.href = url.toString();
+
 }
 
 function getParam(param) {
@@ -29,22 +34,42 @@ function getLastScore() {
     }
 }
 
-// Initial State
+function getHighScore() {
+    const highScore = getParam('high-score');
+    if (highScore) {
+        return parseInt(highScore);
+    } else {
+        return null;
+    }
+}
+
+function saveEndingScore(score) {
+    const params = ['last-score'];
+    const values = [score];
+
+    if(!getHighScore() || score > getHighScore()) {
+        params.push('high-score');
+        values.push(score);
+    }
+
+    setParamsAndRedirect(params, values);
+}
+
+// Initial Game State
 let score = 0;
 let interval = 5000;
 const lastScore = getLastScore();
-
+const highScore = getHighScore();
 
 // Display the last score if it exists, else hide the score
-if (lastScore) {
-    scoreValueSpan.textContent = lastScore;
-} else {
-    scoreDisplayDiv.style.display = 'none';
-}
+scoreValueSpan.textContent = lastScore || '';
+scoreDisplayDiv.style.display = lastScore ? 'block' : 'none';
 
-// Game functions
+// Display the high score if it exists, else hide the high score
+document.getElementById('highScoreValue').textContent = highScore || 0;
 
-function startMusic() {
+// Game start and stop functions
+function startGame() {
     const songNumber = Math.floor(Math.random() * 3) + 1;
     audio.src = `music/gb_${songNumber}.mp3`;
     audio.play();
@@ -57,14 +82,11 @@ function startMusic() {
     cycleCommands();
 }
 
-function stopMusic() {
-    let url = new URL(window.location.href);
-    let params = new URLSearchParams(url.search);
-    params.set('last-score', score);
-    url.search = params.toString();
-    window.location.href = url.toString();
+function stopGame() {
+    saveEndingScore(score);
 }
 
+// Game loop functions
 function flashCommand() {
     scoreDisplayDiv.style.display = 'none';
     commandsDiv.textContent = 'Insert Piece';
@@ -73,7 +95,7 @@ function flashCommand() {
     setTimeout(() => {
         commandsDiv.style.display = 'none';
         document.body.className = 'dark-mode';
-        score++;
+        score += 1;
         scoreValueSpan.textContent = score;
         scoreDisplayDiv.style.display = 'block';
     }, 500);
@@ -89,7 +111,5 @@ function cycleCommands() {
     interval = Math.max(interval - 100, 1000); // Decrease interval by 100ms, but keep it at a minimum of 1 second
 }
 
-document.getElementById('tetrisAudio').addEventListener('ended', () => {
-    stopMusic();
-});
-
+// Event Listeners
+audio.addEventListener('ended', stopGame);
