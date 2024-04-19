@@ -1,0 +1,42 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+body.light-mode {
+    background-color: white; /* Explicit white background */
+    color: black; /* Explicit black text */
+}
+
+body.dark-mode {
+    background-color: black; /* Explicit black background */
+    color: white; /* Explicit white text */
+}
+
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#commands {
+    font-size: 48px;
+    text-align: center;
+    margin: 20px;
+}
+
+button {
+    font-size: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#stopButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+}
