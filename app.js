@@ -8,6 +8,7 @@ const scoreValueSpan = document.getElementById('scoreValue');
 const scoreTextSpan = document.getElementById('scoreText')
 
 let score = 0;
+let interval = 5000;
 
 // Display the last score if it exists, else hide the score
 let url = new URL(window.location.href);
@@ -19,7 +20,6 @@ if (lastScore) {
 } else {
     scoreDisplayDiv.style.display = 'none';
 }
-
 
 function startMusic() {
     const songNumber = Math.floor(Math.random() * 3) + 1;
@@ -62,7 +62,8 @@ function cycleCommands() {
         if (!audio.paused) {
             cycleCommands();
         }
-    }, 5000); // Initial interval is 5 seconds
+    }, interval); // Initial interval is 5 seconds
+    interval = Math.max(interval - 100, 1000); // Decrease interval by 100ms, but keep it at a minimum of 1 second
 }
 
 document.getElementById('tetrisAudio').addEventListener('ended', () => {
